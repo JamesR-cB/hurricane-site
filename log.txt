@@ -1,4 +1,4 @@
 2024-10-08 00:06:57 - Logging started
-2024-10-08 00:06:57 - Internet connection restored
-2024-10-08 00:09:08 - Internet connection lost
-2024-10-08 00:10:08 - Internet connection restored
+2024-10-08 00:06:57 - Internet connection restored (Initial)
+2024-10-08 00:09:08 - Internet connection lost (Testing, ignore!)
+2024-10-08 00:10:08 - Internet connection restored (Testing, ignore!)
