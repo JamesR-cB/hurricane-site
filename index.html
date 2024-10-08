@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Is James Alive?</title>
+    <title>Status Log</title>
     <style>
         body {
             font-family: "Comic Sans MS", cursive, sans-serif;
@@ -12,22 +12,83 @@
         h1 {
             font-size: 48px;
             color: limegreen;
-            word-wrap: break-word;
         }
-        p {
-            width: 90%; /* Allows word wrapping on narrow displays */
-            margin: 0 auto; /* Centers the paragraph */
-            word-wrap: break-word;
+        table {
+            margin: 0 auto;
+            border-collapse: collapse;
+            width: 80%;
+        }
+        table, th, td {
+            border: 1px solid black;
+        }
+        th, td {
+            padding: 8px;
+            text-align: left;
+        }
+        .lost {
+            color: red;
+        }
+        .restored {
+            color: green;
         }
     </style>
 </head>
 <body>
     <header>
-        <h1>Yes! James currently has internet and power!</h1>
+        <h1>Internet Status Log</h1>
     </header>
 
     <section>
-        <p>This site is monitored once every few minutes, and if it goes offline UptimeRobot will send a webhook to Discord, notifying people of me losing power or internet.</p>
+        <table>
+            <thead>
+                <tr>
+                    <th>Timestamp</th>
+                    <th>Event</th>
+                </tr>
+            </thead>
+            <tbody id="log-entries">
+                <!-- Log entries will be injected here -->
+            </tbody>
+        </table>
     </section>
+
+    <script>
+        function loadLog() {
+            fetch('/log.txt')
+                .then(response => response.text())
+                .then(data => {
+                    const logEntries = data.trim().split('\n');
+                    const tableBody = document.getElementById('log-entries');
+                    tableBody.innerHTML = '';  // Clear existing rows
+
+                    logEntries.forEach(entry => {
+                        const [timestamp, ...eventParts] = entry.split(" - ");
+                        const event = eventParts.join(" - ");
+
+                        // Determine event class (color coding)
+                        let eventClass = '';
+                        if (event.toLowerCase().includes('lost')) {
+                            eventClass = 'lost';  // Red for lost
+                        } else if (event.toLowerCase().includes('restored')) {
+                            eventClass = 'restored';  // Green for restored
+                        }
+
+                        const row = `
+                            <tr>
+                                <td>${timestamp}</td>
+                                <td class="${eventClass}">${event}</td>
+                            </tr>`;
+                        tableBody.innerHTML += row;
+                    });
+                })
+                .catch(error => {
+                    const tableBody = document.getElementById('log-entries');
+                    tableBody.innerHTML = '<tr><td colspan="2">Error loading log</td></tr>';
+                });
+        }
+
+        setInterval(loadLog, 10000);  // Refresh the log every 10 seconds
+        loadLog();  // Initial load
+    </script>
 </body>
 </html>
