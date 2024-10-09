@@ -46,6 +46,7 @@
     </header>
 
 <p>This site is monitored once every few minutes, and if it goes offline UptimeRobot will send a webhook to Discord, notifying people of me losing power or internet.</p>
+<p>The log entry refreshes every 10 seconds to retrieve the latest data. You might see a lag time from reality if I am actually offline at the time, but the log entry is accurate.</p>
 
     <section>
         <table>
@@ -96,7 +97,7 @@
                 });
         }
 
-        setInterval(loadLog, 2000);  // Refresh the log every 2 seconds
+        setInterval(loadLog, 10000);  // Refresh the log every 10 seconds
         loadLog();  // Initial load
     </script>
 </body>
